@@ -1,7 +1,7 @@
 # Workshop RAG · SI3003 Inteligencia Artificial
 
 - **Nombre:** Alain Phillip Jay
-- **Código estudiantil:** 1000612103
+- **Código estudiantil:** ...
 - **Usuario de GitHub:** Alain-Phillip
 - **Fecha:** 21 de octubre de 2026
 - **Entrega a:** jipadillab@eafit.edu.co
