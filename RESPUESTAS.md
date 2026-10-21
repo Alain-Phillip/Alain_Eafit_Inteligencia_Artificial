@@ -3,50 +3,6 @@ Escribe aquí tus respuestas con tus propias palabras. Pega tablas, resultados y
 
 ---
 
-# Bloque 0 · Teoría
-
-## T1 · Cuántos nodos viven en cada capa
-
-_Evidencia:_ 
-
-_Mi respuesta / análisis:_
-HNSW es un grafo multicapa. La **capa 0 (base) contiene TODOS los N nodos**. A cada nodo se le asigna una capa máxima con una probabilidad que **decae exponencialmente**, así que las capas superiores tienen cada vez menos nodos: aproximadamente N, N/M, N/M², … hacia arriba, hasta la capa superior con muy pocos (idealmente 1, el punto de entrada). Esa jerarquía —muchos nodos abajo con enlaces cortos, pocos arriba con enlaces largos— es lo que permite navegar en ~O(log N).
-
-
-## T2 · ef, k y el tamaño de la cola
-
-_Evidencia:_
-
-_Mi respuesta / análisis:_
-`ef` (ef_search) es el tamaño de la lista dinámica de candidatos (la cola de prioridad) que HNSW mantiene durante la búsqueda. Debe cumplirse **ef ≥ k**, donde `k` es cuántos resultados finales devuelves; k es la variable que modifica la cantidad de chunks que puede recuperar, limitando la información que puede tener de contexto.
-
-
-## T3 · Inserción frente a búsqueda
-
-_Evidencia:_ (pendiente)
-
-_Mi respuesta / análisis:_
-Insertar un nodo en HNSW es **"buscar + conectar"**: primero se hace una búsqueda (usando `ef_construction`) para hallar los vecinos más cercanos del nuevo nodo, y luego se enlaza con hasta `M` aristas por capa. Por eso **la inserción cuesta más que una búsqueda simple** (recorre Y modifica el grafo), y construir el índice ≈ N inserciones. La búsqueda solo recorre el grafo; la inserción lo recorre y lo escribe.
-
-
-## T4 · El invariante de FAISSVectorStore
-
-_Evidencia:_ (pendiente)
-
-_Mi respuesta / análisis:_
-El invariante es la **correspondencia 1-a-1 entre cada vector del índice y su id/documento externo**: el vector i-ésimo añadido corresponde al id/metadato i-ésimo, y esa alineación debe mantenerse siempre. Además, la **dimensión se fija al crear el índice** y todo vector añadido debe tener esa misma dimensión; el número de vectores almacenados = número de ids en el docstore. Si se rompe esa alineación, las búsquedas devuelven los documentos equivocados.
-
-
-## T5 · El costo de la fuerza bruta
-
-_Evidencia:_ (pendiente)
-
-_Mi respuesta / análisis:_
-La búsqueda exacta (*flat*) calcula la distancia de la query a **cada uno de los N vectores** de dimensión d → **O(N·d)** por consulta. Es 100% exacta (recall perfecto) pero escala **linealmente con N**, así que se vuelve inviable en corpus grandes. Es el *baseline* contra el que se miden los métodos aproximados (HNSW, IVF), que sacrifican un poco de recall a cambio de una búsqueda sublineal.
-
-
----
-
 # Bloque A · App RAG empresarial
 
 ## A1 · Ejecuta la app RAG de punta a punta
